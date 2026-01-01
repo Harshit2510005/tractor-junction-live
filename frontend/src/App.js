@@ -148,6 +148,38 @@ const DealersPage = () => {
   );
 };
 
+const AdminPage = () => {
+  const [formData, setFormData] = useState({
+    brand: '', model: '', hp: '', price: '', image: '🚜', logo: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch('https://tractor-junction-live.onrender.com/api/tractors', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(data => alert(data.message || "Error adding tractor"));
+  };
+
+  return (
+    <div className="container py-5">
+      <h2 className="fw-bold mb-4">Add New Tractor</h2>
+      <form onSubmit={handleSubmit} className="card p-4 shadow-sm border-0 rounded-4" style={{maxWidth: '500px'}}>
+        <input className="form-control mb-3" placeholder="Brand (e.g. Mahindra)" onChange={e => setFormData({...formData, brand: e.target.value})} />
+        <input className="form-control mb-3" placeholder="Model (e.g. Arjun 555)" onChange={e => setFormData({...formData, model: e.target.value})} />
+        <input className="form-control mb-3" placeholder="HP (e.g. 50 HP)" onChange={e => setFormData({...formData, hp: e.target.value})} />
+        <input className="form-control mb-3" placeholder="Price (e.g. 7.5 Lakh*)" onChange={e => setFormData({...formData, price: e.target.value})} />
+        <input className="form-control mb-3" placeholder="Image URL" onChange={e => setFormData({...formData, image: e.target.value})} />
+        <input className="form-control mb-3" placeholder="Brand Logo URL" onChange={e => setFormData({...formData, logo: e.target.value})} />
+        <button className="btn btn-primary w-100 rounded-pill fw-bold">Add Tractor</button>
+      </form>
+    </div>
+  );
+};
+
 // --- 3. Main App Component ---
 function App() {
   const [tractorData, setTractorData] = useState({});
@@ -252,6 +284,7 @@ function App() {
           
           <Route path="/brand/:brandName" element={<BrandModelsPage />} />
           <Route path="/dealers" element={<DealersPage />} />
+          <Route path="/admin-control-panel" element={<AdminPage />} />
         </Routes>
 
         <footer className="py-5 text-center border-top bg-white mt-5">
