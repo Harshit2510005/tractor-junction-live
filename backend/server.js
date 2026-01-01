@@ -129,6 +129,15 @@ app.get('/api/tractors/:brandName', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+app.post('/api/tractors', async (req, res) => {
+  try {
+    const newTractor = new Tractor(req.body);
+    await newTractor.save();
+    res.status(201).json({ message: "✅ Tractor Added Successfully!" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 // Server Start
 const PORT = 5000;
