@@ -82,6 +82,36 @@ app.get('/api/seed-dealers', async (req, res) => {
     }
 });
 
+const User = require('./models/User'); // User model import karein
+
+// --- Register API ---
+app.post('/api/register', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const userExists = await User.findOne({ email });
+    if (userExists) return res.status(400).json({ message: "User pehle se hai!" });
+
+    const newUser = new User({ email, password });
+    await newUser.save();
+    res.status(201).json({ message: "Registration Safal Raha!" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// --- Login API ---
+app.post('/api/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email, password }); // Simple check (Hashing baad mein karenge)
+    if (!user) return res.status(400).json({ message: "Email ya Password galat hai!" });
+
+    res.json({ message: "Login Safal!", user: { email: user.email } });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Server Start
 // Render aur baki hosting ke liye process.env.PORT zaroori hai
 const PORT = process.env.PORT || 5000;
