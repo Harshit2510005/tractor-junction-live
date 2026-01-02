@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 const tractorSchema = new mongoose.Schema({
-    brand: { type: String, required: true },
-    model: { type: String, required: true },
-    hp: String,
-    price: String,
-    logo: String,  // Image ka path
-    image: String  // Tractor photo ka path
+  brand: { type: String, required: true },
+  logo: { type: String, required: true },
+  website: { type: String }, // Official website ke liye
+  model: { type: String },   // Ab ye required nahi hai
+  hp: { type: String },      // Ab ye required nahi hai
+  price: { type: String },   // Ab ye required nahi hai
+  image: { type: String, default: "🚜" }
 });
 
 module.exports = mongoose.model('Tractor', tractorSchema);
