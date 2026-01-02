@@ -164,7 +164,7 @@ function App() {
               <div className="row g-3 justify-content-center">
                 {Object.keys(tractorData).map((brand, i) => (
                   <div key={i} className="col-6 col-md-4 col-lg-3">
-                    <a href={tractorData[brand].url} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-dark">
+                    <a href={tractorData[brand].url} className="text-decoration-none text-dark">
                       <div className="card h-100 border-0 shadow-sm text-center p-3 brand-card rounded-4">
                         <div className="d-flex align-items-center justify-content-center mb-2" style={{ height: '60px' }}>
                            <img src={tractorData[brand].logo} alt={brand} style={{ maxWidth: '100%', maxHeight: '50px', objectFit: 'contain' }} />
