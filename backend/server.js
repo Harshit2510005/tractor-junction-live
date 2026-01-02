@@ -11,8 +11,11 @@ const app = express();
 
 // --- 1. Middlewares ---
 // CORS ko correctly configure karein taaki Vercel se request aa sake
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+    origin: "*", // Sabhi domains ko allow karein (Testing ke liye)
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
 
 // --- 2. MongoDB Connection ---
 mongoose.connect('mongodb+srv://HK:Harshit2510@cluster0.mhompz4.mongodb.net/tractorJunction')
