@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaSearch, FaPhoneAlt, FaMapMarkerAlt, FaBars } from 'react-icons/fa';
+// Navbar collapse ko smoothly handle karne ke liye bootstrap components ka use karein
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { FaPhoneAlt, FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
 
 const API_BASE_URL = "https://tractor-junction-live.onrender.com/api";
 
@@ -29,14 +31,14 @@ const AuthPage = () => {
             <label className="form-label small fw-bold">Password</label>
             <input type="password" className="form-control rounded-pill p-2 shadow-none" required onChange={(e) => setPassword(e.target.value)} />
           </div>
-          <button className="btn btn-primary w-100 rounded-pill py-2 fw-bold mb-3 shadow-sm mt-2">
+          <Button type="submit" className="btn btn-primary w-100 rounded-pill py-2 fw-bold mb-3 shadow-sm mt-2 border-0">
             {isLogin ? 'Login' : 'Sign Up Now'}
-          </button>
+          </Button>
         </form>
         <p className="text-center small text-muted mb-0">
-          {isLogin ? "Naye user hain?" : "Pehle se account hai?"}
-          <span
-            className="text-primary fw-bold ms-1"
+          {isLogin ? "Naye user hain?" : "Pehle se account hai?"} 
+          <span 
+            className="text-primary fw-bold ms-1" 
             style={{ cursor: 'pointer', textDecoration: 'underline' }}
             onClick={() => setIsLogin(!isLogin)}
           >
@@ -48,7 +50,7 @@ const AuthPage = () => {
   );
 };
 
-// --- Dealers Page (Mobile Friendly Grid) ---
+// --- Dealers Page ---
 const DealersPage = () => {
   const [dealers, setDealers] = useState([]);
   useEffect(() => {
@@ -77,6 +79,8 @@ const DealersPage = () => {
 function App() {
   const [tractorData, setTractorData] = useState({});
   const [loading, setLoading] = useState(true);
+  // Menu ko auto-close karne ke liye state
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/tractors`)
@@ -85,9 +89,9 @@ function App() {
         if (data.length > 0) {
           const grouped = data.reduce((acc, curr) => {
             if (!acc[curr.brand]) {
-              acc[curr.brand] = {
-                logo: curr.logo,
-                url: curr.website || `https://www.google.com/search?q=${curr.brand}+tractors`
+              acc[curr.brand] = { 
+                logo: curr.logo, 
+                url: curr.website || `https://www.google.com/search?q=${curr.brand}+tractors` 
               };
             }
             return acc;
@@ -103,40 +107,36 @@ function App() {
   return (
     <Router>
       <div style={{ backgroundColor: '#fcfcfc', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
-
-        {/* Mobile Friendly Navbar */}
-        <nav className="navbar navbar-expand-lg navbar-light bg-white py-2 shadow-sm sticky-top border-bottom">
-          <div className="container">
-            {/* Brand Logo */}
-            <Link className="navbar-brand fw-bold text-primary fs-4" to="/">
+        
+        {/* React-Bootstrap Navbar for perfect mobile toggle */}
+        <Navbar 
+          expanded={expanded} 
+          onToggle={setExpanded} 
+          expand="lg" 
+          bg="white" 
+          variant="light" 
+          className="py-2 shadow-sm sticky-top border-bottom"
+        >
+          <Container>
+            <Navbar.Brand as={Link} to="/" className="fw-bold text-primary fs-4" onClick={() => setExpanded(false)}>
               TRACTOR <span className="text-dark">JUNCTION</span>
-            </Link>
-
-            {/* Hamburger Toggle Button */}
-            <button
-              className="navbar-toggler border-0 shadow-none"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <FaBars className="text-dark" />
-            </button>
-
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <div className="navbar-nav ms-auto align-items-center py-3 py-lg-0">
-                {/* Jab mobile par link click ho, toh menu band ho jaye isliye hum manually toggle trigger kar sakte hain */}
-                <Link className="nav-link px-3 fw-bold text-dark" to="/" onClick={() => document.getElementById('navbarNav').classList.remove('show')}>Home</Link>
-                <Link className="nav-link px-3 fw-bold text-dark mb-2 mb-lg-0" to="/dealers" onClick={() => document.getElementById('navbarNav').classList.remove('show')}>Dealers</Link>
-                <Link className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100 w-lg-auto" to="/auth" onClick={() => document.getElementById('navbarNav').classList.remove('show')}>
-                  Sign In
-                </Link>
-              </div>
-            </div>
-          </div>
-        </nav>
+            </Navbar.Brand>
+            
+            <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0 shadow-none" />
+            
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="ms-auto align-items-center text-center">
+                <Nav.Link as={Link} to="/" className="px-3 fw-bold text-dark" onClick={() => setExpanded(false)}>Home</Nav.Link>
+                <Nav.Link as={Link} to="/dealers" className="px-3 fw-bold text-dark mb-2 mb-lg-0" onClick={() => setExpanded(false)}>Dealers</Nav.Link>
+                <Nav.Link as={Link} to="/auth" className="p-0" onClick={() => setExpanded(false)}>
+                  <Button className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100">
+                    Sign In
+                  </Button>
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
 
         <Routes>
           <Route path="/" element={
@@ -148,7 +148,7 @@ function App() {
                     <a href={tractorData[brand].url} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-dark">
                       <div className="card h-100 border-0 shadow-sm text-center p-3 brand-card rounded-4">
                         <div className="d-flex align-items-center justify-content-center mb-2" style={{ height: '60px' }}>
-                          <img src={tractorData[brand].logo} alt={brand} style={{ maxWidth: '100%', maxHeight: '50px', objectFit: 'contain' }} />
+                           <img src={tractorData[brand].logo} alt={brand} style={{ maxWidth: '100%', maxHeight: '50px', objectFit: 'contain' }} />
                         </div>
                         <h6 className="fw-bold text-uppercase small mb-1">{brand}</h6>
                         <span className="text-primary x-small fw-bold">Visit Site →</span>
@@ -166,6 +166,7 @@ function App() {
         <style>{`
           .brand-card:active { transform: scale(0.95); transition: 0.2s; }
           .x-small { font-size: 0.7rem; }
+          .nav-link { color: black !important; }
           @media (min-width: 992px) {
             .brand-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important; border: 1px solid #0d6efd !important; }
           }
