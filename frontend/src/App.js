@@ -1,21 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// Navbar collapse ko smoothly handle karne ke liye bootstrap components ka use karein
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { FaPhoneAlt, FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
+import { FaPhoneAlt, FaMapMarkerAlt } from 'react-icons/fa';
 
 const API_BASE_URL = "https://tractor-junction-live.onrender.com/api";
 
-// --- Smart Auth Page (Mobile Responsive) ---
+// --- Smart Auth Page (Login & Register Integrated) ---
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleAuth = (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
-    alert(`${isLogin ? 'Login' : 'Register'} process shuru ho gaya: ${email}`);
+    const endpoint = isLogin ? '/api/login' : '/api/register';
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      const data = await response.json();
+      alert(data.message); // Server se aaya message dikhayega
+      
+      if (response.ok && isLogin) {
+        // Login success hone par home par bhejega
+        window.location.href = "/"; 
+      } else if (response.ok && !isLogin) {
+        // Register success hone par login mode par switch karega
+        setIsLogin(true);
+      }
+    } catch (err) {
+      alert("Server se connect nahi ho pa raha!");
+    }
   };
 
   return (
@@ -25,17 +45,30 @@ const AuthPage = () => {
         <form onSubmit={handleAuth}>
           <div className="mb-3">
             <label className="form-label small fw-bold">Email Address</label>
-            <input type="email" className="form-control rounded-pill p-2 shadow-none" placeholder="name@example.com" required onChange={(e) => setEmail(e.target.value)} />
+            <input 
+              type="email" 
+              className="form-control rounded-pill p-2 shadow-none" 
+              placeholder="name@example.com" 
+              required 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} 
+            />
           </div>
           <div className="mb-3">
             <label className="form-label small fw-bold">Password</label>
-            <input type="password" className="form-control rounded-pill p-2 shadow-none" required onChange={(e) => setPassword(e.target.value)} />
+            <input 
+              type="password" 
+              className="form-control rounded-pill p-2 shadow-none" 
+              required 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} 
+            />
           </div>
           <Button type="submit" className="btn btn-primary w-100 rounded-pill py-2 fw-bold mb-3 shadow-sm mt-2 border-0">
             {isLogin ? 'Login' : 'Sign Up Now'}
           </Button>
         </form>
-        <p className="text-center small text-muted mb-0">
+        <div className="text-center small text-muted mb-0">
           {isLogin ? "Naye user hain?" : "Pehle se account hai?"} 
           <span 
             className="text-primary fw-bold ms-1" 
@@ -44,7 +77,7 @@ const AuthPage = () => {
           >
             {isLogin ? 'Register Karein' : 'Login Karein'}
           </span>
-        </p>
+        </div>
       </div>
     </div>
   );
@@ -79,7 +112,6 @@ const DealersPage = () => {
 function App() {
   const [tractorData, setTractorData] = useState({});
   const [loading, setLoading] = useState(true);
-  // Menu ko auto-close karne ke liye state
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -107,31 +139,18 @@ function App() {
   return (
     <Router>
       <div style={{ backgroundColor: '#fcfcfc', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
-        
-        {/* React-Bootstrap Navbar for perfect mobile toggle */}
-        <Navbar 
-          expanded={expanded} 
-          onToggle={setExpanded} 
-          expand="lg" 
-          bg="white" 
-          variant="light" 
-          className="py-2 shadow-sm sticky-top border-bottom"
-        >
+        <Navbar expanded={expanded} onToggle={setExpanded} expand="lg" bg="white" variant="light" className="py-2 shadow-sm sticky-top border-bottom">
           <Container>
             <Navbar.Brand as={Link} to="/" className="fw-bold text-primary fs-4" onClick={() => setExpanded(false)}>
               TRACTOR <span className="text-dark">JUNCTION</span>
             </Navbar.Brand>
-            
             <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0 shadow-none" />
-            
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto align-items-center text-center">
                 <Nav.Link as={Link} to="/" className="px-3 fw-bold text-dark" onClick={() => setExpanded(false)}>Home</Nav.Link>
                 <Nav.Link as={Link} to="/dealers" className="px-3 fw-bold text-dark mb-2 mb-lg-0" onClick={() => setExpanded(false)}>Dealers</Nav.Link>
                 <Nav.Link as={Link} to="/auth" className="p-0" onClick={() => setExpanded(false)}>
-                  <Button className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100">
-                    Sign In
-                  </Button>
+                  <Button className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100">Sign In</Button>
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>
