@@ -42,60 +42,88 @@ app.post('/api/add-tractor', async (req, res) => {
 
 // 5. API: Database mein shuruati data (Seed) bharne ke liye
 app.get('/api/seed', async (req, res) => {
-    try {
-        const fullTractorData = [
-            // MAHINDRA
-            { brand: "MAHINDRA", logo: "/image/mahindra-1673872647.webp", website: "https://share.google/JQWE2AoGWEtfhx66C" },
-            
-            // JOHN DEERE
-            { brand: "JOHN DEERE", model: "5310 GearPro", hp: "55 HP", price: "9.20 Lakh*", logo: "/image/john-deere-1579511882.webp", image: "🚜" },
-            { brand: "JOHN DEERE", model: "5050 D", hp: "50 HP", price: "8.10 Lakh*", logo: "/image/john-deere-1579511882.webp", image: "🚜" },
-            
-            // MASSEY-FERGUSON
-            { brand: "MASSEY-FERGUSON", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/massey-ferguson-1579512590.webp", image: "🚜" },
-            
-            // SWARAJ
-            { brand: "SWARAJ", model: "855 FE", hp: "52 HP", price: "7.90 Lakh*", logo: "/image/swaraj.png", image: "🚜" },
-            { brand: "SWARAJ", model: "744 XT", hp: "48 HP", price: "7.20 Lakh*", logo: "/image/swaraj.png", image: "🚜" },
-            
-            // SONALIKA
-            { brand: "SONALIKA", model: "Tiger DI 65", hp: "65 HP", price: "10.5 Lakh*", logo: "/image/sonalika-1725262747.webp", image: "🚜" },
-            
-            // EICHER
-            { brand: "EICHER", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/Eicher.png", image: "🚜" },
-            
-            // VST
-            { brand: "VST", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/vst-logo-present-scaled.webp", image: "🚜" },
-            
-            // KUBOTA
-            { brand: "KUBOTA", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/Kubota-Symbol.png", image: "🚜" },
-            
-            // NEW-HOLLAND
-            { brand: "NEW-HOLLAND", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/New-Holland.png", image: "🚜" },
-            
-            // POWETRAC
-            { brand: "POWETRAC", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/powertrac-1579511958-2.webp", image: "🚜" },
-            
-            // PREET
-            { brand: "PREET", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/PREET.png", image: "🚜" },
-            
-            // SOLIS
-            { brand: "SOLIS TRACTORS", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/Solish.webp", image: "🚜" },
-            
-            // HINDUSTAN & OTHERS
-            { brand: "HINDUSTAN", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/hindustan.png", image: "🚜" },
-            { brand: "INDO-FARM", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/indo-farm.webp", image: "🚜" },
-            { brand: "KARTAR", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/kartar 1975.webp", image: "🚜" },
-            { brand: "DEUTZ FAHR", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/Deutz fahr.png", image: "🚜" }
-        ];
-
-        await Tractor.deleteMany({}); // Purana data saaf
-        await Tractor.insertMany(fullTractorData); // Naya sara data ek sath insert
-        res.send("✅ Tractor Junction ka sara data MongoDB mein load ho gaya hai!");
-    } catch (error) {
-        res.status(500).send("❌ Data load karne mein galti: " + error.message);
-    }
+  try {
+    await Tractor.deleteMany({}); // Purana sara data delete karein
+    const seedData = [
+      { 
+        brand: "MAHINDRA", 
+        logo: "/image/mahindra-1673872647.webp", 
+        website: "https://www.mahindratractor.com/" 
+      },
+      { 
+        brand: "VST", 
+        logo: "/image/vst-logo-present-scaled.webp", 
+        website: "https://vsttractors.com/" 
+      },
+      { 
+        brand: "JOHN DEERE", 
+        logo: "/image/john-deere-1579511882.webp", 
+        website: "https://www.deere.co.in/en/tractors/" 
+      },
+      { 
+        brand: "MASSEY-FERGUSON", 
+        logo: "/image/massey-ferguson-1579512590.webp", 
+        website: "https://masseyfergusonindia.com/massey-ferguson/" 
+      },
+      { 
+        brand: "SWARAJ", 
+        logo: "/image/swaraj.png", 
+        website: "https://www.swarajtractors.com/" 
+      },
+      { 
+        brand: "SONALIKA", 
+        logo: "/image/sonalika-1725262747.webp", 
+        website: "https://www.sonalika.com/" 
+      },
+      { 
+        brand: "EICHER", 
+        logo: "/image/Eicher.png", 
+        website: "https://eichertractors.in/eichertractors/" 
+      },
+      { 
+        brand: "KUBOTA", 
+        logo: "/image/Kubota-Symbol.png", 
+        website: "https://www.kubota.com/products/tractor/index.html" 
+      },
+      { 
+        brand: "NEW-HOLLAND", 
+        logo: "/image/New-Holland.png", 
+        website: "https://agriculture.newholland.com/en/india/products/agricultural-tractors" 
+      },
+      { 
+        brand: "POWETRAC", 
+        logo: "/image/powertrac-1579511958-2.webp", 
+        website: "https://powertrac.escortskubota.com/" 
+      },
+      { 
+        brand: "PREET", 
+        logo: "/image/PREET.png", 
+        website: "https://www.preet.co/PREET-agricultural-tractors.php"
+      },
+      { 
+        brand: "SOLIS TRACTORS", 
+        logo: "/image/Solish.webp", 
+        website: "https://solis-yanmar.com/" 
+      },
+      { 
+        brand: "INDO-FARM", 
+        logo: "/image/indo-farm.webp", 
+        website: "https://www.indofarm.in/tractor/" 
+      },
+      { 
+        brand: "KARTAR", 
+        logo: "/image/kartar 1975.webp", 
+        website: "https://kartartractors.com/" 
+      }
+      
+    ];
+    await Tractor.insertMany(seedData);
+    res.send("✅ Data Seeded Successfully with Official Links!");
+  } catch (err) {
+    res.status(500).send("❌ Error: " + err.message);
+  }
 });
+
 const Dealer = require('./models/Dealer');
 
 // 1. Saare dealers lane ke liye
