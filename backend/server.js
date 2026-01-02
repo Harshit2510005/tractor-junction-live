@@ -45,9 +45,7 @@ app.get('/api/seed', async (req, res) => {
     try {
         const fullTractorData = [
             // MAHINDRA
-            { brand: "MAHINDRA", model: "Arjun 555 DI", hp: "50 HP", price: "7.60 Lakh*", logo: "/image/mahindra-1673872647.webp", image: "https://www.mahindratractor.com/assets/images/arjun-555.png" },
-            { brand: "MAHINDRA", model: "Jivo 225 DI", hp: "20 HP", price: "4.30 Lakh*", logo: "/image/mahindra-1673872647.webp", image: "https://www.mahindratractor.com/assets/images/jivo.png" },
-            { brand: "MAHINDRA", model: "Yuvo 575 DI", hp: "45 HP", price: "7.10 Lakh*", logo: "/image/mahindra-1673872647.webp", image: "https://www.mahindratractor.com/assets/images/yuvo.png" },
+            { brand: "MAHINDRA", logo: "/image/mahindra-1673872647.webp", website: "https://share.google/JQWE2AoGWEtfhx66C" },
             
             // JOHN DEERE
             { brand: "JOHN DEERE", model: "5310 GearPro", hp: "55 HP", price: "9.20 Lakh*", logo: "/image/john-deere-1579511882.webp", image: "🚜" },
