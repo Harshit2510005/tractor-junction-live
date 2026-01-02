@@ -67,7 +67,7 @@ app.get('/api/seed', async (req, res) => {
             { brand: "EICHER", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/Eicher.png", image: "🚜" },
             
             // VST
-            { brand: "VST", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/VST-logo-present-scaled.webp", image: "🚜" },
+            { brand: "VST", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/vst-logo-present-scaled.webp", image: "🚜" },
             
             // KUBOTA
             { brand: "KUBOTA", model: "380 Super DI", hp: "40 HP", price: "6.20 Lakh*", logo: "/image/Kubota-Symbol.png", image: "🚜" },
