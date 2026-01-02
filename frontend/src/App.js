@@ -106,24 +106,41 @@ function App() {
         
         {/* Mobile Friendly Navbar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-white py-2 shadow-sm sticky-top border-bottom">
-          <div className="container">
-            <Link className="navbar-brand fw-bold text-primary fs-4" to="/">TRACTOR <span className="text-dark">JUNCTION</span></Link>
-            
-            <button className="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <FaBars className="text-dark" />
-            </button>
+        <div className="container">
+        {/* Brand Logo */}
+          <Link className="navbar-brand fw-bold text-primary fs-4" to="/">
+             TRACTOR <span className="text-dark">JUNCTION</span>
+          </Link>
+    
+        {/* Hamburger Toggle Button */}
+        <button 
+        className="navbar-toggler border-0 shadow-none" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation"
+      >
+      <FaBars className="text-dark" />
+        </button>
 
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <div className="navbar-nav ms-auto align-items-center py-3 py-lg-0">
-                <Link className="nav-link px-3 fw-bold text-dark" to="/">Home</Link>
-                <Link className="nav-link px-3 fw-bold text-dark mb-2 mb-lg-0" to="/dealers">Dealers</Link>
-                <Link className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100 w-lg-auto" to="/auth">
-                  Sign In
-                </Link>
-              </div>
-            </div>
-          </div>
-        </nav>
+      {/* Menu Items */}
+      <div className="collapse navbar-collapse" id="navbarNav">
+      <div className="navbar-nav ms-auto align-items-center py-3 py-lg-0">
+        <Link className="nav-link px-3 fw-bold text-dark" to="/">Home</Link>
+        <Link className="nav-link px-3 fw-bold text-dark mb-2 mb-lg-0" to="/dealers">Dealers</Link>
+        
+        {/* Sign In Button - Mobile Friendly Width */}
+        <div className="w-100 px-3 px-lg-0 mt-2 mt-lg-0" style={{ maxWidth: '200px' }}>
+          <Link className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100" to="/auth">
+            Sign In
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
 
         <Routes>
           <Route path="/" element={
