@@ -1,27 +1,32 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
+// Models Import
 const Tractor = require('./models/Tractor'); 
 const Dealer = require('./models/Dealer');
+const User = require('./models/User'); 
 
 const app = express();
 
-// Middlewares
+// --- 1. Middlewares ---
+// CORS ko correctly configure karein taaki Vercel se request aa sake
 app.use(cors());
 app.use(express.json());
 
-// 1. MongoDB Connection
-// Note: Harshit, dhyan dein ki aapka password aur connection string sahi ho
+// --- 2. MongoDB Connection ---
 mongoose.connect('mongodb+srv://HK:Harshit2510@cluster0.mhompz4.mongodb.net/tractorJunction')
     .then(() => console.log("✅ Cloud MongoDB Connected!"))
     .catch(err => console.log("❌ Connection Error:", err));
 
-// 2. Home Route
+// --- 3. Routes ---
+
+// Home Route
 app.get('/', (req, res) => {
-    res.send("<h1>🚀 Tractor Junction Backend Chalu Hai!</h1><p>Data dekhne ke liye <b>/api/tractors</b> par jayein.</p>");
+    res.send("<h1>🚀 Tractor Junction Backend Chalu Hai!</h1>");
 });
 
-// 3. API: Saare Tractors mangwane ke liye
+// API: Saare Tractors mangwane ke liye
 app.get('/api/tractors', async (req, res) => {
     try {
         const data = await Tractor.find();
@@ -52,13 +57,13 @@ app.get('/api/seed', async (req, res) => {
       { brand: "KARTAR", logo: "/image/kartar 1975.webp", website: "https://kartartractors.com/" }
     ];
     await Tractor.insertMany(seedData);
-    res.send("✅ Data Seeded Successfully with Official Links!");
+    res.send("✅ Data Seeded Successfully with Working Logos!");
   } catch (err) {
     res.status(500).send("❌ Error: " + err.message);
   }
 });
 
-// 5. Dealers API
+// Dealers API
 app.get('/api/dealers', async (req, res) => {
     try {
         const dealers = await Dealer.find();
@@ -68,52 +73,38 @@ app.get('/api/dealers', async (req, res) => {
     }
 });
 
-app.get('/api/seed-dealers', async (req, res) => {
-    try {
-        const sampleDealers = [
-            { brand: "MAHINDRA", name: "Kisan Tractor Agency", city: "Ahmedabad", phone: "9876543210", address: "S.G. Highway" },
-            { brand: "SWARAJ", name: "Bharat Motors", city: "Jaipur", phone: "9123456789", address: "Main Market Road" }
-        ];
-        await Dealer.deleteMany({});
-        await Dealer.insertMany(sampleDealers);
-        res.send("✅ Dealers data added!");
-    } catch (err) {
-        res.status(500).send("❌ Error: " + err.message);
-    }
-});
+// --- 4. Auth APIs (Login & Register) ---
 
-const User = require('./models/User'); // User model import karein
-
-// --- Register API ---
 app.post('/api/register', async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ message: "Sabhi fields bharna zaroori hai!" });
+
     const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: "User pehle se hai!" });
+    if (userExists) return res.status(400).json({ message: "Account pehle se bana hai!" });
 
     const newUser = new User({ email, password });
     await newUser.save();
-    res.status(201).json({ message: "Registration Safal Raha!" });
+    res.status(201).json({ message: "Registration Safal! Ab Sign In karein." });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "Server Error: " + err.message });
   }
 });
 
-// --- Login API ---
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email, password }); // Simple check (Hashing baad mein karenge)
+    const user = await User.findOne({ email, password });
+    
     if (!user) return res.status(400).json({ message: "Email ya Password galat hai!" });
 
     res.json({ message: "Login Safal!", user: { email: user.email } });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: "Server Error: " + err.message });
   }
 });
 
-// Server Start
-// Render aur baki hosting ke liye process.env.PORT zaroori hai
+// --- 5. Server Start ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port: ${PORT}`);
