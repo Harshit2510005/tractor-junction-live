@@ -34,9 +34,9 @@ const AuthPage = () => {
           </button>
         </form>
         <p className="text-center small text-muted mb-0">
-          {isLogin ? "Naye user hain?" : "Pehle se account hai?"} 
-          <span 
-            className="text-primary fw-bold ms-1" 
+          {isLogin ? "Naye user hain?" : "Pehle se account hai?"}
+          <span
+            className="text-primary fw-bold ms-1"
             style={{ cursor: 'pointer', textDecoration: 'underline' }}
             onClick={() => setIsLogin(!isLogin)}
           >
@@ -85,9 +85,9 @@ function App() {
         if (data.length > 0) {
           const grouped = data.reduce((acc, curr) => {
             if (!acc[curr.brand]) {
-              acc[curr.brand] = { 
-                logo: curr.logo, 
-                url: curr.website || `https://www.google.com/search?q=${curr.brand}+tractors` 
+              acc[curr.brand] = {
+                logo: curr.logo,
+                url: curr.website || `https://www.google.com/search?q=${curr.brand}+tractors`
               };
             }
             return acc;
@@ -103,44 +103,40 @@ function App() {
   return (
     <Router>
       <div style={{ backgroundColor: '#fcfcfc', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
-        
+
         {/* Mobile Friendly Navbar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-white py-2 shadow-sm sticky-top border-bottom">
-        <div className="container">
-        {/* Brand Logo */}
-          <Link className="navbar-brand fw-bold text-primary fs-4" to="/">
-             TRACTOR <span className="text-dark">JUNCTION</span>
-          </Link>
-    
-        {/* Hamburger Toggle Button */}
-        <button 
-        className="navbar-toggler border-0 shadow-none" 
-        type="button" 
-        data-bs-toggle="collapse" 
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav" 
-        aria-expanded="false" 
-        aria-label="Toggle navigation"
-      >
-      <FaBars className="text-dark" />
-        </button>
+          <div className="container">
+            {/* Brand Logo */}
+            <Link className="navbar-brand fw-bold text-primary fs-4" to="/">
+              TRACTOR <span className="text-dark">JUNCTION</span>
+            </Link>
 
-      {/* Menu Items */}
-      <div className="collapse navbar-collapse" id="navbarNav">
-      <div className="navbar-nav ms-auto align-items-center py-3 py-lg-0">
-        <Link className="nav-link px-3 fw-bold text-dark" to="/">Home</Link>
-        <Link className="nav-link px-3 fw-bold text-dark mb-2 mb-lg-0" to="/dealers">Dealers</Link>
-        
-        {/* Sign In Button - Mobile Friendly Width */}
-        <div className="w-100 px-3 px-lg-0 mt-2 mt-lg-0" style={{ maxWidth: '200px' }}>
-          <Link className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100" to="/auth">
-            Sign In
-          </Link>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+            {/* Hamburger Toggle Button */}
+            <button
+              className="navbar-toggler border-0 shadow-none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <FaBars className="text-dark" />
+            </button>
+
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <div className="navbar-nav ms-auto align-items-center py-3 py-lg-0">
+                {/* Jab mobile par link click ho, toh menu band ho jaye isliye hum manually toggle trigger kar sakte hain */}
+                <Link className="nav-link px-3 fw-bold text-dark" to="/" onClick={() => document.getElementById('navbarNav').classList.remove('show')}>Home</Link>
+                <Link className="nav-link px-3 fw-bold text-dark mb-2 mb-lg-0" to="/dealers" onClick={() => document.getElementById('navbarNav').classList.remove('show')}>Dealers</Link>
+                <Link className="btn btn-primary rounded-pill px-4 fw-bold btn-sm shadow-sm w-100 w-lg-auto" to="/auth" onClick={() => document.getElementById('navbarNav').classList.remove('show')}>
+                  Sign In
+                </Link>
+              </div>
+            </div>
+          </div>
+        </nav>
 
         <Routes>
           <Route path="/" element={
@@ -152,7 +148,7 @@ function App() {
                     <a href={tractorData[brand].url} target="_blank" rel="noopener noreferrer" className="text-decoration-none text-dark">
                       <div className="card h-100 border-0 shadow-sm text-center p-3 brand-card rounded-4">
                         <div className="d-flex align-items-center justify-content-center mb-2" style={{ height: '60px' }}>
-                           <img src={tractorData[brand].logo} alt={brand} style={{ maxWidth: '100%', maxHeight: '50px', objectFit: 'contain' }} />
+                          <img src={tractorData[brand].logo} alt={brand} style={{ maxWidth: '100%', maxHeight: '50px', objectFit: 'contain' }} />
                         </div>
                         <h6 className="fw-bold text-uppercase small mb-1">{brand}</h6>
                         <span className="text-primary x-small fw-bold">Visit Site →</span>
